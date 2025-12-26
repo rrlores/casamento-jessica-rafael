@@ -1,0 +1,230 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>03 - Decoração | Jéssica e Rafael</title>
+<style>
+  body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#f9f9f9;color:#333}
+  .container{max-width:1100px;margin:0 auto;padding:20px}
+  
+  /* Capa */
+  .cover-top{
+    height:360px;
+    border-radius:12px;
+    overflow:hidden;
+    /* Foto de capa */
+    background-image:url('Jessica%20e%20Rafael%20-307.jpg'); 
+    background-size:cover;
+    background-position:center;
+    box-shadow:0 12px 40px rgba(0,0,0,0.1);
+    position: relative;
+  }
+  .cover-overlay{
+    background:linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+    height:100%;
+    display:flex;
+    align-items:flex-end;
+    padding:30px;
+    color:#fff;
+  }
+  h1{margin:0;font-size:32px;font-weight:700; text-shadow: 0 2px 4px rgba(0,0,0,0.3);}
+  
+  /* Grid de Fotos */
+  .grid{
+    display:grid;
+    gap:10px;
+    grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+    margin-top:20px;
+  }
+  .thumb-container {
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+    aspect-ratio: 1 / 1;
+    background-color: #eee;
+  }
+  .thumb{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition: transform 0.3s ease;
+    display:block;
+  }
+  .thumb-container:hover .thumb {
+    transform: scale(1.05);
+  }
+
+  /* Navegação */
+  .nav{margin-bottom:20px}
+  a.btn{
+    display:inline-block;
+    padding:10px 20px;
+    border-radius:30px;
+    background:#333;
+    color:#fff;
+    text-decoration:none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  a.btn:hover { background: #555; }
+
+  /* --- LIGHTBOX (Janela Modal) --- */
+  .lightbox {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    justify-content: center;
+    align-items: center;
+  }
+  .lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 20px; right: 30px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 50px;
+    cursor: pointer;
+    padding: 20px;
+    user-select: none;
+    transition: color 0.2s;
+  }
+  .lightbox-nav:hover { color: #ddd; }
+  .prev { left: 10px; }
+  .next { right: 10px; }
+
+</style>
+</head>
+<body>
+
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <span class="lightbox-close">&times;</span>
+    <div class="lightbox-nav prev" onclick="changeImage(-1, event)">&#10094;</div>
+    <div class="lightbox-nav next" onclick="changeImage(1, event)">&#10095;</div>
+    <img id="lightbox-img" src="" alt="Ampliação">
+  </div>
+
+  <div class="container">
+    <div class="nav"><a class="btn" href="../index.html">&larr; Voltar ao Índice</a></div>
+    
+    <div class="cover-top" aria-hidden="true">
+      <div class="cover-overlay">
+        <h1>03 - Decoração</h1>
+      </div>
+    </div>
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; color:#666;">
+        <p><strong id="photo-count">0</strong> fotos</p>
+    </div>
+
+    <div class="grid" id="gallery-grid"></div>
+  </div>
+
+<script>
+  // CONFIGURAÇÃO
+  const baseName = "Jessica e Rafael -";
+  const extension = ".jpg";
+  const galleryGrid = document.getElementById('gallery-grid');
+
+  // LISTA MANUAL DE FOTOS (Copiada do seu código original)
+  // Como os números são muito espaçados, é melhor listar um por um.
+  const photoList = [
+    307, 308, 309, 310, 311, 312,
+    346, 347, 349, 350, 351, 352, 353, 354, 355, 356,
+    1366, 1367, 1368, 1369, 1370, 1371, 1372, 1373, 1374, 1375, 1376, 1377, 1378, 1379,
+    1436, 1437, 1438, 1439, 1440, 1441, 1442, 1443, 1444, 1445, 1446, 1447, 1448, 1449, 1450, 1451, 1452, 1453, 1454, 1455, 1456, 1457, 1458,
+    1690,
+    1891, 1892, 1893, 1894,
+    1905, 1906, 1907, 1908, 1909
+  ];
+
+  let currentImageIndex = 0; // Isso agora representa a POSIÇÃO no array photoList, não o número da foto.
+
+  // 1. GERAR A GRADE
+  function generateGallery() {
+    photoList.forEach((photoNum, index) => {
+      const fileName = `${baseName}${photoNum}${extension}`;
+      const encodedName = encodeURIComponent(baseName) + photoNum + extension; 
+
+      const link = document.createElement('div');
+      link.className = 'thumb-container';
+      link.onclick = () => openLightbox(index); // Passa o índice do array
+
+      const img = document.createElement('img');
+      img.className = 'thumb';
+      img.src = encodedName;
+      img.alt = fileName;
+      img.loading = "lazy";
+
+      link.appendChild(img);
+      galleryGrid.appendChild(link);
+    });
+    
+    document.getElementById('photo-count').innerText = photoList.length;
+  }
+
+  // 2. FUNÇÕES DO LIGHTBOX
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+
+  function openLightbox(index) {
+    currentImageIndex = index;
+    updateLightboxImage();
+    lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox(event) {
+    if (event && event.target !== lightbox && event.target.className !== 'lightbox-close') return;
+    lightbox.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  function updateLightboxImage() {
+    const photoNum = photoList[currentImageIndex];
+    const encodedName = encodeURIComponent(baseName) + photoNum + extension;
+    lightboxImg.src = encodedName;
+  }
+
+  function changeImage(direction, event) {
+    if(event) event.stopPropagation();
+    
+    currentImageIndex += direction;
+
+    // Loop infinito
+    if (currentImageIndex >= photoList.length) currentImageIndex = 0;
+    if (currentImageIndex < 0) currentImageIndex = photoList.length - 1;
+
+    updateLightboxImage();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (lightbox.style.display === 'flex') {
+      if (e.key === "ArrowLeft") changeImage(-1);
+      if (e.key === "ArrowRight") changeImage(1);
+      if (e.key === "Escape") closeLightbox({target: lightbox});
+    }
+  });
+
+  generateGallery();
+</script>
+
+</body>
+</html>
