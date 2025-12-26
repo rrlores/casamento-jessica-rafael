@@ -1,0 +1,615 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Casamento - Jéssica e Rafael</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fbf7f5;
+      --card: #fff;
+      --muted: #8a7f7a;
+      --accent: #b97a6a;
+      --dark: #222;
+      --max-width: 1100px;
+      --header-height: 70px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(var(--header-height) + 20px);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    /* --- LAYOUT & HEADER --- */
+    .site {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      position: sticky;
+      top: 0;
+      background: rgba(251, 247, 245, 0.95);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .menu { display: flex; gap: 25px; }
+    .menu a {
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+    .menu a:hover { color: var(--accent); }
+
+    .hamburger { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--dark); }
+
+    /* --- HERO --- */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+      padding: 40px 0 80px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(36px, 6vw, 56px);
+      margin: 0 0 20px;
+      line-height: 1.1;
+      color: var(--dark);
+    }
+
+    p.lead {
+      color: var(--muted);
+      font-size: 18px;
+      margin: 0 0 30px;
+      max-width: 480px;
+    }
+
+    .btn {
+      background: var(--dark);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      background: var(--accent);
+      box-shadow: 0 8px 25px rgba(185, 122, 106, 0.3);
+    }
+
+    .hero-image {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+      aspect-ratio: 4/3;
+      position: relative;
+    }
+
+    .hero-image img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .hero-image:hover img { transform: scale(1.05); }
+
+    /* --- SEÇÕES GERAIS --- */
+    section { padding: 60px 0; }
+    
+    .section-header { margin-bottom: 40px; text-align: center; }
+    h2 { font-family: "Playfair Display", serif; font-size: 36px; margin: 0; color: var(--dark); }
+    .subtitle {
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    /* --- GRID DE ÁLBUMS --- */
+    .albums-grid {
+      display: grid;
+      gap: 25px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: flex;
+      flex-direction: column;
+      opacity: 0; 
+      animation: slideUp 0.6s ease-out forwards;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(185, 122, 106, 0.15);
+    }
+
+    .card-img-wrap {
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .card:hover .card-img { transform: scale(1.1); }
+
+    .card-body { padding: 24px; }
+    
+    .album-title {
+      font-family: "Playfair Display", serif;
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 6px;
+      display: block;
+      color: var(--dark);
+    }
+
+    .album-meta {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .album-meta::before { content: "•"; color: var(--accent); }
+
+    /* --- VÍDEO (Estilo Cinema) --- */
+    .video-featured-wrapper { max-width: 900px; margin: 0 auto; }
+
+    .video-card-featured {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.03);
+      transition: transform 0.3s ease;
+    }
+
+    .video-card-featured:hover { transform: translateY(-5px); box-shadow: 0 25px 70px rgba(185, 122, 106, 0.2); }
+
+    .video-cover-link {
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      display: block;
+    }
+
+    .video-image {
+      width: 100%; height: 100%;
+      background-size: cover; background-position: center;
+      transition: transform 0.6s ease;
+    }
+    .video-cover-link:hover .video-image { transform: scale(1.05); }
+
+    .play-icon-overlay {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(5px);
+      border: 2px solid rgba(255,255,255,0.8);
+      color: #fff;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    .video-cover-link:hover .play-icon-overlay {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .video-content {
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .video-content h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 28px;
+      margin: 0 0 16px 0;
+      color: var(--dark);
+    }
+
+    .video-content p {
+      color: var(--muted);
+      font-size: 16px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    /* --- DEPOIMENTOS (NOVO) --- */
+    .testimonials-grid {
+      display: grid;
+      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      margin-top: 20px;
+    }
+
+    .testimonial-card {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.02);
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(185, 122, 106, 0.1);
+    }
+
+    .quote-icon {
+      font-family: "Playfair Display", serif;
+      font-size: 60px;
+      line-height: 1;
+      color: var(--accent);
+      opacity: 0.3;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .testimonial-text {
+      font-size: 15px;
+      color: #555;
+      font-style: italic;
+      margin-bottom: 24px;
+      line-height: 1.7;
+      flex-grow: 1;
+    }
+
+    .testimonial-author {
+      font-family: "Playfair Display", serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--dark);
+    }
+
+    /* Footer */
+    footer {
+      padding: 60px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 60px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    /* Animações */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Responsividade */
+    @media(max-width:850px) {
+      .hero { grid-template-columns: 1fr; text-align: center; gap: 30px; }
+      .hero-left { order: 2; }
+      .hero-image { order: 1; }
+      
+      .video-card-featured { grid-template-columns: 1fr; }
+      .video-cover-link { height: 250px; }
+      .video-content { padding: 30px 20px; align-items: center; text-align: center; }
+      
+      .hamburger { display: block; }
+      .menu {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: #fff;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        border-bottom: 1px solid #eee;
+      }
+      .menu.active { display: flex; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="site">
+    <header class="nav">
+      <a href="#" class="logo">Jéssica & Rafael</a>
+      <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
+      <nav class="menu" id="menu">
+        <a href="#home" onclick="closeMenu()">Início</a>
+        <a href="#albums" onclick="closeMenu()">Fotos</a>
+        <a href="#video" onclick="closeMenu()">Vídeo</a>
+        <a href="#depoimentos" onclick="closeMenu()">Mensagens</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="hero-left">
+          <h1>Memórias do nosso Grande Dia</h1>
+          <p class="lead">Reunimos com carinho cada registro, cada sorriso e cada momento inesquecível do nosso casamento. Reviva essa história conosco.</p>
+          <a class="btn" href="#albums">Ver Fotos</a>
+        </div>
+        <div class="hero-image">
+          <img src="04 - Cerimonia/Jessica e Rafael -1282.jpg" alt="Foto Capa" loading="lazy">
+        </div>
+      </section>
+
+      <section id="albums">
+        <div class="section-header">
+          <span class="subtitle">Galeria</span>
+          <h2>Nossos Álbuns</h2>
+        </div>
+        
+        <div class="albums-grid" id="albumsGrid"></div>
+      </section>
+
+      <section id="video">
+        <div class="section-header">
+          <span class="subtitle">Cinema</span>
+          <h2>Vídeo do Casamento</h2>
+        </div>
+
+        <div class="video-featured-wrapper">
+          <div class="video-card-featured">
+            
+            <a href="https://www.youtube.com/watch?v=Lenlce-KOrI" target="_blank" class="video-cover-link">
+              <div class="video-image" style="background-image: url('09 - Festa/Jessica e Rafael -1615.jpg');">
+                <div class="play-icon-overlay">
+                  <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              </div>
+            </a>
+
+            <div class="video-content">
+              <h3>Filme Oficial</h3>
+              <p>Reviva cada segundo deste dia inesquecível. A cerimônia emocionante e a festa na íntegra.</p>
+              <a href="https://www.youtube.com/watch?v=Lenlce-KOrI" target="_blank" class="btn">
+                Assistir no YouTube
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section id="depoimentos">
+        <div class="section-header">
+          <span class="subtitle">Carinho</span>
+          <h2>Mensagens dos Amigos</h2>
+        </div>
+
+        <div class="testimonials-grid">
+          
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Amigos, desejo muita felicidade, muitos anos de união e muitas viagens a vocês. Obrigada por me convidarem para fazer parte deste momento.
+            </p>
+            <div class="testimonial-author">Pri</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Rafa e Je, desejamos que a saúde, o amor, a ternura, a bondade e a doçura estejam sempre presentes em suas vidas, nesta bela e abençoada família que vocês estão formando! Parabéns seus lindos! Fico muito feliz em lembrar que foi no IOS que está conexão de alma aconteceu =)
+            </p>
+            <div class="testimonial-author">Kelly Lopes e Sidney Rios</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Que Deus abençoe vocês nessa nova fase, que seja repleta de alegria &lt;3
+            </p>
+            <div class="testimonial-author">Vando e Fran</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Que seja abençoado tudo aquilo que ainda irão construir, os sonhos, os desafios que vão superar e as alegrias que certamente virão em abundância. Desejamos prosperidade, cumplicidade, leveza e respeito. Que o lar de vocês seja refúgio e transborde amor. Com muita felicidade e carinho.
+            </p>
+            <div class="testimonial-author">Aline, Ewerton e Miguelzinho</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Que vocês sejam ainda mais felizes nessa nova fase da vida de vocês, tudo o que há de melhor nesse novo ciclo e que vocês vivam intensamente cada momento juntos! Aproveitem muito esse dia! Abração!
+            </p>
+            <div class="testimonial-author">Allan Sobral e Gabriela Lima</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Desejamos toda a felicidade do mundo para vocês nessa nova fase. Que seja cheia de amor, paz, felicidades e conquistas!
+            </p>
+            <div class="testimonial-author">Douglas & Victoria</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Toda a felicidade do mundo para vocês!! Amamos vocês Tio Rafa e tia Gisca !!
+            </p>
+            <div class="testimonial-author">Vini, Nati e Helô</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Olá, amigos! Este é um mimo acompanhado de nossos votos. Que vocês tenham inúmeros momentos de amor com muita fartura por toda a vida. Abraços e viva aos noivos!
+            </p>
+            <div class="testimonial-author">Gabriel e Rogério</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Rafael e Jessica meus queridos amigos, que a vida a dois seja como um jardim encantado, onde a paciência é o solo, o amor é a semente e a felicidade é a flor que desabrocha. Parabéns pelo casamento! Forte abraço
+            </p>
+            <div class="testimonial-author">Ageu & Roré</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Com muito carinho, desejamos que esta nova etapa da vida de vocês seja repleta de amor, companheirismo e alegria. Que cada dia juntos fortaleça ainda mais essa linda união. Parabéns e muitas felicidades!
+            </p>
+            <div class="testimonial-author">Ermeson & Salete</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Parabéns Rafa e Gisca. Estamos muito feliz em poder prestigiar esse momento tão especial na vida de vocês! Que o amor de vocês continue sendo essa força linda que inspira e transborda! Será uma felicidade enorme compartilhar e testemunhar esse dia tão importante e cheio de emoção. Parabéns aos noivos! Que seja o início de uma história ainda mais linda juntos!
+            </p>
+            <div class="testimonial-author">Jé, Rafa, Re, e Pam</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Desejo que sejam sempre felizes e inspiradores como são!!!
+            </p>
+            <div class="testimonial-author">Rafael Rodrigues</div>
+          </div>
+
+          <div class="testimonial-card">
+            <span class="quote-icon">“</span>
+            <p class="testimonial-text">
+              Vocês são a prova de que a vida fica muito mais leve e divertida quando a gente encontra a pessoa certa pra compartilhar cada momento! Que Deus abençoe ainda mais a união de vocês! Um beijão, Kathê e Família!
+            </p>
+            <div class="testimonial-author">Katherine Menezes</div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <p>© <span id="ano"></span> Jéssica e Rafael. Feito com amor.</p>
+    </footer>
+  </div>
+
+  <script>
+    // --- CONFIGURAÇÃO DOS ÁLBUNS ---
+    const albums = [
+      { title: "Pré-wedding", folder: "00 - Pré-wedding", cover: "Jess e Rafa PW-1.jpg", count: 322, link: "00 - Pré-wedding/index.html" },
+      { title: "Making Of Noiva", folder: "01 - Making Of Noiva", cover: "Jessica e Rafael -1.jpg", count: 284, link: "01 - Making Of Noiva/index.html" },
+      { title: "Making Of Noivo", folder: "02 - Making Of Noivo", cover: "Jessica e Rafael -287.jpg", count: 54, link: "02 - Making Of Noivo/index.html" },
+      { title: "Decoração", folder: "03 - Decoracao", cover: "Jessica e Rafael -307.jpg", count: 63, link: "03 - Decoracao/index.html" },
+      { title: "Cerimônia", folder: "04 - Cerimonia", cover: "Jessica e Rafael -358.jpg", count: 924, link: "04 - Cerimonia/index.html" },
+      { title: "Ensaio Padrinhos e Casal", folder: "05 - Ensaio Padrinhos e Casal", cover: "Jessica e Rafael -1283A.jpg", count: 82, link: "05 - Ensaio Padrinhos e Casal/index.html" },
+      { title: "Abertura e Brinde", folder: "06 - Abertura e Brinde", cover: "Jessica e Rafael -1380.jpg", count: 56, link: "06 - Abertura e Brinde/index.html" },
+      { title: "Trend Fotos", folder: "07 - Trend Fotos", cover: "Jessica e Rafael -1461.jpg", count: 105, link: "07 - Trend Fotos/index.html" },
+      { title: "Dança Casal", folder: "08 - Danca Casal", cover: "Jessica e Rafael -1566.jpg", count: 48, link: "08 - Danca Casal/index.html" },
+      { title: "Festa", folder: "09 - Festa", cover: "Jessica e Rafael -1615.jpg", count: 222, link: "09 - Festa/index.html" },
+      { title: "Bouquet e Whisky", folder: "10 - Bouquet e Whisky", cover: "Jessica e Rafael -1839.jpg", count: 52, link: "10 - Bouquet e Whisky/index.html" }
+    ];
+
+    // --- LÓGICA DO SITE ---
+    const grid = document.getElementById('albumsGrid');
+    
+    albums.forEach((album, index) => {
+      const coverPath = encodeURIComponent(album.folder) + '/' + encodeURIComponent(album.cover);
+      const delay = index * 0.05; 
+
+      const cardHTML = `
+        <a href="${album.link}" class="card" style="animation-delay: ${delay}s">
+          <div class="card-img-wrap">
+            <img src="${coverPath}" alt="${album.title}" class="card-img" loading="lazy">
+          </div>
+          <div class="card-body">
+            <span class="album-title">${album.title}</span>
+            <span class="album-meta">${album.count} fotos</span>
+          </div>
+        </a>
+      `;
+      grid.innerHTML += cardHTML;
+    });
+
+    document.getElementById('ano').textContent = new Date().getFullYear();
+
+    const menu = document.getElementById('menu');
+    function toggleMenu() {
+      menu.classList.toggle('active');
+    }
+    function closeMenu() {
+      menu.classList.remove('active');
+    }
+  </script>
+
+</body>
+</html>
